@@ -97,7 +97,8 @@ export function getHeaders() {
   const accessStore = useAccessStore.getState();
   let headers: Record<string, string> = {
     "Content-Type": "application/json",
-    "x-requested-with": "XMLHttpRequest",
+    "Cache-Control": "no-cache",
+    "api-key": process.env.OPENAI_API_KEY || "",
   };
 
   const makeBearer = (token: string) => `Bearer ${token.trim()}`;

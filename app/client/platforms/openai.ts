@@ -10,7 +10,8 @@ import {
 import { prettyObject } from "@/app/utils/format";
 
 export class ChatGPTApi implements LLMApi {
-  public ChatPath = "v1/chat/completions";
+  public ChatPath =
+    "openai/deployments/gpt-35-turbo/chat/completions?api-version=2023-03-15-preview";
   public UsagePath = "dashboard/billing/usage";
   public SubsPath = "dashboard/billing/subscription";
 
@@ -93,6 +94,7 @@ export class ChatGPTApi implements LLMApi {
             );
 
             if (contentType?.startsWith("text/plain")) {
+              console.log("[Request] gpt response: ", res);
               responseText = await res.clone().text();
               return finish();
             }
@@ -108,6 +110,7 @@ export class ChatGPTApi implements LLMApi {
               let extraInfo = await res.clone().text();
               try {
                 const resJson = await res.clone().json();
+                console.log("[Request] stream openai response: ", resJson);
                 extraInfo = prettyObject(resJson);
               } catch {}
 
@@ -154,6 +157,7 @@ export class ChatGPTApi implements LLMApi {
         clearTimeout(requestTimeoutId);
 
         const resJson = await res.json();
+        console.log("[Request] no stream openai response: ", resJson);
         const message = this.extractMessage(resJson);
         options.onFinish(message);
       }

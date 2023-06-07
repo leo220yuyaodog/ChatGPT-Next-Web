@@ -289,6 +289,7 @@ export const useChatStore = create<ChatStore>()(
             set(() => ({}));
           },
           onFinish(message) {
+            console.log("[Chat] finished ", message);
             botMessage.streaming = false;
             if (message) {
               botMessage.content = message;
